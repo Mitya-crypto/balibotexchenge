@@ -14,6 +14,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
         <Web3Provider>
         <Providers>
           {children}
