@@ -1,9 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { getUser, sanitizeTelegramUsername } from '@/lib/tg';
 import { tr } from '../../components/ui/tr';
 
+const DEFAULT_USERNAME = sanitizeTelegramUsername(undefined);
+
 export default function ProfilePage(){
-  const [username, setUsername] = useState('@user');
+  const [username, setUsername] = useState(DEFAULT_USERNAME);
   const [email, setEmail] = useState<string|undefined>();
   const [verified, setVerified] = useState(false);
   const [langLabel, setLangLabel] = useState('Русский');
@@ -11,9 +14,17 @@ export default function ProfilePage(){
   const [walletsCount, setWalletsCount] = useState<number>(0);
 
   useEffect(()=>{
+    const tgUser = getUser();
+    setUsername(sanitizeTelegramUsername(tgUser?.username ?? undefined));
     try{
-      const u = localStorage.getItem('username') || '@user';
-      setUsername(u.startsWith('@') ? u : '@'+u);
+      const storedUsername = localStorage.getItem('username');
+      const normalized = sanitizeTelegramUsername(tgUser?.username ?? storedUsername ?? undefined);
+      setUsername(normalized);
+      if (tgUser?.username){
+        localStorage.setItem('username', tgUser.username);
+      } else if (storedUsername && normalized !== DEFAULT_USERNAME){
+        localStorage.setItem('username', normalized);
+      }
       const m = localStorage.getItem('userEmail') || undefined;
       setEmail(m);
       setVerified(localStorage.getItem('userEmailVerified')==='1');
