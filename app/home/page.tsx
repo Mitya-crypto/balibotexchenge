@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { getUser, sanitizeTelegramUsername } from '@/lib/tg';
 import { useI18n } from '../../lib/i18n';
 
 /* ===== Иконки ===== */
@@ -63,17 +64,56 @@ function Action({
   );
 }
 
+const DEFAULT_AVATAR = '/apple-touch-icon.png';
+const DEFAULT_USERNAME = sanitizeTelegramUsername(undefined);
+
 export default function HomePage() {
   const { t } = useI18n();
   const [hide, setHide] = useState(false);
-  const [user, setUser] = useState('@mityya_La');
+  const [user, setUser] = useState(DEFAULT_USERNAME);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       setHide(localStorage.getItem('hideBalance') === '1');
-      const u = localStorage.getItem('username') || '@mityya_La';
-      setUser(u.startsWith('@') ? u : '@' + u);
     } catch {}
+
+    const tgUser = getUser();
+
+    let storedUsername: string | null = null;
+    let storedPhoto: string | null = null;
+    try {
+      storedUsername = localStorage.getItem('username');
+      storedPhoto = localStorage.getItem('userPhoto') ?? localStorage.getItem('photo_url');
+    } catch {}
+
+    const normalizedUsername = sanitizeTelegramUsername(tgUser?.username ?? storedUsername ?? undefined);
+    setUser(normalizedUsername);
+
+    if (tgUser?.username) {
+      try {
+        localStorage.setItem('username', tgUser.username);
+      } catch {}
+    } else if (storedUsername && normalizedUsername !== DEFAULT_USERNAME) {
+      try {
+        localStorage.setItem('username', normalizedUsername);
+      } catch {}
+    }
+
+    const resolvedPhoto = (() => {
+      const candidate = tgUser?.photo_url ?? storedPhoto ?? null;
+      if (typeof candidate === 'string' && candidate.trim().length > 0) {
+        return candidate;
+      }
+      return null;
+    })();
+    setPhotoUrl(resolvedPhoto);
+
+    if (tgUser?.photo_url && resolvedPhoto === tgUser.photo_url) {
+      try {
+        localStorage.setItem('userPhoto', tgUser.photo_url);
+      } catch {}
+    }
   }, []);
 
   const toggle = () =>
@@ -91,6 +131,13 @@ export default function HomePage() {
       <section className="home-hero">
         <div className="hero-top">
           <div className="user-chip">
+            <div className="ava">
+              <img
+                src={photoUrl ?? DEFAULT_AVATAR}
+                alt={user}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
             <div style={{ fontWeight: 800 }}>{user}</div>
           </div>
           <div className="badge-beta">{t('common', 'beta_badge')}</div>

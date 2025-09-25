@@ -12,7 +12,7 @@ export default function LanguagePage() {
   const { lang, setLang, t } = useI18n();
   return (
     <main className="mx-auto max-w-[480px] p-4">
-      <h1 className="text-xl font-semibold mb-4">{t('settings.language.title')}</h1>
+      <h1 className="text-xl font-semibold mb-4">{t('settings','language_title')}</h1>
       <div className="space-y-2">
         {LANGS.map(L => (
           <button
