@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useI18n } from '../../lib/i18n';
 
 /* ===== Иконки ===== */
 function IconPlus() {
@@ -63,6 +64,7 @@ function Action({
 }
 
 export default function HomePage() {
+  const { t } = useI18n();
   const [hide, setHide] = useState(false);
   const [user, setUser] = useState('@mityya_La');
 
@@ -91,7 +93,7 @@ export default function HomePage() {
           <div className="user-chip">
             <div style={{ fontWeight: 800 }}>{user}</div>
           </div>
-          <div className="badge-beta">beta ⓘ</div>
+          <div className="badge-beta">{t('common', 'beta_badge')}</div>
         </div>
 
         <div style={{ marginTop: 10 }}>
@@ -100,27 +102,27 @@ export default function HomePage() {
 
         <div className="hero-balance">
           <h2>
-            Общий баланс{' '}
+            {t('home', 'total_balance')}{' '}
             <button onClick={toggle} className="btn btn-ghost" style={{ marginLeft: 6 }}>
               👁
             </button>
           </h2>
-          <div className="hero-amount">{hide ? '• • • ₽' : '0.0 ₽'}</div>
+          <div className="hero-amount">{hide ? t('home', 'hidden_amount') : '0.0 ₽'}</div>
         </div>
 
         {/* Quick actions */}
-        <div className="quick-grid" aria-label="Quick actions">
-          <Action href="/topup" icon={<IconPlus />} label="Пополнить" />
-          <Action href="/send" icon={<IconArrow />} label="Отправить" />
-          <Action href="/exchange" icon={<IconBank />} label="Обмен валют" dot />
-          <Action href="/pay" icon={<IconBasket />} label="Оплата" />
+        <div className="quick-grid" aria-label={t('home', 'quick_actions_aria')}>
+          <Action href="/topup" icon={<IconPlus />} label={t('home', 'action_deposit')} />
+          <Action href="/send" icon={<IconArrow />} label={t('home', 'action_send')} />
+          <Action href="/exchange" icon={<IconBank />} label={t('home', 'action_exchange')} dot />
+          <Action href="/pay" icon={<IconBasket />} label={t('home', 'action_pay')} />
         </div>
       </section>
 
       {/* PROMO */}
       <section className="promo-card">
-        <div className="promo-title">До 30% комиссии</div>
-        {/* ...дальше твой контент... */}
+        <div className="promo-title">{t('home', 'promo_title')}</div>
+        <div className="promo-sub">{t('home', 'promo_sub')}</div>
       </section>
     </div>
   );

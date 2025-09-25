@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useI18n } from '../../lib/i18n';
 
 export type Tile = {
   href: string;
@@ -19,6 +20,7 @@ export default function ActionGrid({items}:{items: Tile[]}) {
 }
 
 function Tile({href,label,icon,badge,ok,disabled}:Tile){
+  const { t } = useI18n();
   const body = (
     <div className={`tile ${disabled?'is-disabled':''}`}>
       <div className="tile-ico">{icon ?? <span className="dot"/>}</div>
@@ -27,7 +29,7 @@ function Tile({href,label,icon,badge,ok,disabled}:Tile){
         {badge && <span className="tile-badge">{badge}</span>}
       </div>
       {ok && <span className="tile-ok">✓</span>}
-      {disabled && <span className="tile-soon">Soon</span>}
+      {disabled && <span className="tile-soon">{t('common','soon')}</span>}
     </div>
   );
   return disabled ? <div className="tile-wrap">{body}</div> : <Link className="tile-wrap" href={href}>{body}</a>;

@@ -1,18 +1,19 @@
 'use client';
 import React from 'react';
-import { tr } from '../../components/ui/tr';
+import { useI18n } from '../../lib/i18n';
 
 export default function KycHub(){
+  const { t } = useI18n();
   return (
     <div className="container" style={{maxWidth:480, margin:'16px auto 96px', padding:'0 16px'}}>
       <section className="card" style={{display:'grid', gap:12, padding:'16px'}}>
-        <h1 style={{margin:0, fontSize:18, fontWeight:900}}>{tr('kyc','title','KYC верификация')}</h1>
-        <p className="meta" style={{margin:'0 0 4px'}}>{tr('kyc','subtitle','Выберите документ и загрузите фото')}</p>
+        <h1 style={{margin:0, fontSize:18, fontWeight:900}}>{t('kyc','title')}</h1>
+        <p className="meta" style={{margin:'0 0 4px'}}>{t('kyc','subtitle')}</p>
 
         <div className="kyc-list">
-          <KycTile href="/kyc/passport" label={tr('kyc','passport','Паспорт')}            icon={<IconDoc/>}/>
-          <KycTile href="/kyc/id"       label={tr('kyc','idcard','ID-карта')}             icon={<IconId/>}/>
-          <KycTile href="/kyc/driver"   label={tr('kyc','driver','Водительское удостоверение')} icon={<IconDriver/>}/>
+          <KycTile href="/kyc/passport" label={t('kyc','passport')}            icon={<IconDoc/>}/>
+          <KycTile href="/kyc/id"       label={t('kyc','idcard')}             icon={<IconId/>}/>
+          <KycTile href="/kyc/driver"   label={t('kyc','driver')} icon={<IconDriver/>}/>
         </div>
       </section>
     </div>

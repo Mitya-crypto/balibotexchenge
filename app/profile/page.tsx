@@ -1,14 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { tr } from '../../components/ui/tr';
+import { useI18n } from '../../lib/i18n';
 
 export default function ProfilePage(){
+  const { t, lang: activeLang } = useI18n();
   const [username, setUsername] = useState('@user');
   const [email, setEmail] = useState<string|undefined>();
   const [verified, setVerified] = useState(false);
-  const [langLabel, setLangLabel] = useState('Русский');
   const [devicesCount, setDevicesCount] = useState<number>(0);
   const [walletsCount, setWalletsCount] = useState<number>(0);
+  const langLabel = t('lang', activeLang) || activeLang;
 
   useEffect(()=>{
     try{
@@ -17,8 +18,6 @@ export default function ProfilePage(){
       const m = localStorage.getItem('userEmail') || undefined;
       setEmail(m);
       setVerified(localStorage.getItem('userEmailVerified')==='1');
-      const L = (localStorage.getItem('lang')||'ru').toLowerCase();
-      setLangLabel(L==='en'?'English':L==='id'?'Bahasa Indonesia':'Русский');
       const rawDev = localStorage.getItem('devices_v1');
       if (rawDev){ try{ const arr = JSON.parse(rawDev); setDevicesCount(Array.isArray(arr)?arr.length:0); }catch{} }
       const rawWal = localStorage.getItem('wallets.v1');
@@ -50,8 +49,8 @@ export default function ProfilePage(){
         <a href="/kyc" className="mini-tile">
           <span className="mini-ico">{IconShield()}</span>
           <div className="mini-col">
-            <div className="mini-title">{tr('profile','kyc','KYC верификация')}</div>
-            <div className="mini-sub">{tr('profile','kyc','KYC')}</div>
+            <div className="mini-title">{t('profile','kyc_title')}</div>
+            <div className="mini-sub">{t('profile','kyc_short')}</div>
           </div>
           <span className="chev">›</span>
         </a>
@@ -59,38 +58,40 @@ export default function ProfilePage(){
         <a href="/email" className="mini-tile">
           <span className="mini-ico">{IconAt()}</span>
           <div className="mini-col">
-            <div className="mini-title">{tr('profile','email','E-mail')}</div>
+            <div className="mini-title">{t('profile','email')}</div>
             <div className="mini-sub">
-              {email ? (verified ? tr('profile','email_ok','Подтверждён') : tr('profile','email_verify','Подтвердить')) : tr('profile','email_add','Добавить')}
+              {email
+                ? (verified ? t('profile','email_ok') : t('profile','email_verify'))
+                : t('profile','email_add')}
             </div>
           </div>
           <span className="chev">›</span>
         </a>
       </section>
 
-      <h2 className="sect-title">{tr('profile','ref','Реферальная программа')}</h2>
+      <h2 className="sect-title">{t('profile','ref')}</h2>
       <div className="list-card">
-        <Row href="/promo/ref" icon={IconUsers()} label={tr('profile','ref','Реферальная программа')} />
-        <Row href="/promo"     icon={IconGift()}  label="Promo / Coupons" />
+        <Row href="/promo/ref" icon={IconUsers()} label={t('profile','ref')} />
+        <Row href="/promo"     icon={IconGift()}  label={t('profile','promo')} />
       </div>
 
-      <h2 className="sect-title">{tr('profile','settings','Параметры')}</h2>
+      <h2 className="sect-title">{t('profile','settings')}</h2>
       <div className="list-card">
-        <Row href="/settings/security" icon={IconLock()}    label={tr('security','title','Безопасность')} />
-        <Row href="/settings/language" icon={IconGlobe()}   label={tr('profile','language','Язык')} value={langLabel}/>
-        <Row href="/wallets"           icon={IconWallet()}  label={tr('profile','wallets','Кошельки')} value={String(walletsCount || 0)} />
-        <Row href="/devices"           icon={IconDevice()}  label={tr('profile','devices','Устройства')} value={String(devicesCount || 0)} />
+        <Row href="/settings/security" icon={IconLock()}    label={t('security','title')} />
+        <Row href="/settings/language" icon={IconGlobe()}   label={t('profile','language')} value={langLabel}/>
+        <Row href="/wallets"           icon={IconWallet()}  label={t('profile','wallets')} value={String(walletsCount || 0)} />
+        <Row href="/devices"           icon={IconDevice()}  label={t('profile','devices')} value={String(devicesCount || 0)} />
       </div>
 
-      <h2 className="sect-title">{tr('profile','about','О нас')}</h2>
+      <h2 className="sect-title">{t('profile','about')}</h2>
       <div className="list-card">
-        <Row href="/official" icon={IconTg()}  label="Official accounts" />
-        <Row href="/faq"      icon={IconHelp()} label="FAQ" />
-        <Row href="/info"     icon={IconInfo()} label="Info" />
-        <Row href="/support"  icon={IconChat()} label="Поддержка" />
+        <Row href="/official" icon={IconTg()}  label={t('profile','official_accounts')} />
+        <Row href="/faq"      icon={IconHelp()} label={t('profile','faq')} />
+        <Row href="/info"     icon={IconInfo()} label={t('profile','info')} />
+        <Row href="/support"  icon={IconChat()} label={t('profile','support')} />
       </div>
 
-      <button type="button" onClick={logout} className="logout-btn">{tr('profile','logout','Выйти из аккаунта')}</button>
+      <button type="button" onClick={logout} className="logout-btn">{t('profile','logout')}</button>
     </div>
   );
 }

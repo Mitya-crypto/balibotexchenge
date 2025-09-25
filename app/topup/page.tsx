@@ -1,29 +1,30 @@
 'use client';
 import React, { useState } from 'react';
-import { tr } from '../../components/ui/tr';
+import { useI18n } from '../../lib/i18n';
 
 const TABS = ['IDR','RUB','USD','EUR'] as const;
 type Cur = typeof TABS[number];
 
 export default function TopUpPage(){
+  const { t } = useI18n();
   const [cur, setCur] = useState<Cur>('RUB');
 
   return (
     <div className="container" style={{maxWidth:480, margin:'90px auto 96px', padding:'0 16px', display:'grid', gap:12}}>
       <section className="card" style={{display:'grid', gap:10}}>
-        <h1 style={{fontSize:18, fontWeight:800, margin:0}}>{tr('topup','title','Пополнить')}</h1>
+        <h1 style={{fontSize:18, fontWeight:800, margin:0}}>{t('topup','title')}</h1>
         <div className="seg">{TABS.map(t=><button key={t} data-active={cur===t?1:0} onClick={()=>setCur(t)}>{t}</button>)}</div>
-        <div className="field"><input placeholder={`${tr('topup','amount_in','Сумма в')} ${cur}`} inputMode="decimal" /><span className="meta">{tr('topup','currency','валюта')}</span></div>
-        <p className="meta" style={{margin:0}}>{tr('topup','demo_note','Это демо-экран. Функции пополнения — визуал без бэкенда.')}</p>
+        <div className="field"><input placeholder={`${t('topup','amount_in')} ${cur}`} inputMode="decimal" /><span className="meta">{t('topup','currency')}</span></div>
+        <p className="meta" style={{margin:0}}>{t('topup','demo_note')}</p>
       </section>
 
       <section className="card" style={{display:'grid', gap:10}}>
-        <h2 style={{fontSize:16, fontWeight:800, margin:0}}>{tr('topup','methods','Способы')}</h2>
-        <Method href="/wallets" icon={<IconCard/>} title={tr('topup','card','Банковская карта')} note={tr('topup','card_note','UI-демо, без списания')} />
-        <Method href="/wallets" icon={<IconCrypto/>} title={tr('topup','crypto','Крипто-депозит')} note={tr('topup','crypto_note','Пополнение через адрес')} />
-        <Method href="/scan"    icon={<IconQR/>}    title={tr('topup','qr','QR-код')}          note={tr('topup','qr_note','Отсканировать код для оплаты')} />
-        <Method href="/promo"   icon={<IconGift/>}  title={tr('topup','gift','Подарочный код')} note={tr('topup','gift_note','Активировать промокод')} />
-        <a href="/home" className="btn" style={{width:'100%'}}>{tr('topup','done','Готово')}</a>
+        <h2 style={{fontSize:16, fontWeight:800, margin:0}}>{t('topup','methods')}</h2>
+        <Method href="/wallets" icon={<IconCard/>} title={t('topup','card')} note={t('topup','card_note')} />
+        <Method href="/wallets" icon={<IconCrypto/>} title={t('topup','crypto')} note={t('topup','crypto_note')} />
+        <Method href="/scan"    icon={<IconQR/>}    title={t('topup','qr')}          note={t('topup','qr_note')} />
+        <Method href="/promo"   icon={<IconGift/>}  title={t('topup','gift')} note={t('topup','gift_note')} />
+        <a href="/home" className="btn" style={{width:'100%'}}>{t('topup','done')}</a>
       </section>
     </div>
   );

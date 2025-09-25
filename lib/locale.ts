@@ -1,46 +1,283 @@
-export type Lang = 'ru' | 'en' | 'id';
+export const AVAILABLE_LANGS = ['ru', 'en', 'id'] as const;
+export type Lang = (typeof AVAILABLE_LANGS)[number];
 
-const dict: Record<Lang, Record<string, Record<string, string>>> = {
+export type Namespace =
+  | 'common'
+  | 'home'
+  | 'profile'
+  | 'security'
+  | 'lang'
+  | 'settings'
+  | 'kyc'
+  | 'topup';
+
+export type Messages = Record<Namespace, Record<string, string>>;
+
+export const FALLBACK_LANG: Lang = 'ru';
+export const LANG_STORAGE_KEY = 'lang';
+
+export const dictionaries: Record<Lang, Messages> = {
   ru: {
-    quick: { topup:'Пополнить', send:'Отправить', exchange:'Обмен валют', pay:'Оплата', aria:'Быстрые действия' },
-    home: { total_balance:'Общий баланс', toggle_balance:'Показать/скрыть баланс', hidden_amount:'• • • ₽', quick_actions:'Быстрые действия', action_topup:'Пополнить', action_send:'Отправить', action_sell:'Обмен', action_pay:'Оплата', promo_title:'До 30% комиссии', promo_sub:'за платежи друзей по вашей ссылке', promo_cta:'Пригласить', soon:'Скоро', asset_badge_new:'NEW' },
-    profile:{ title:'Профиль', ref:'Реферальная программа', settings:'Параметры', about:'О нас', kyc:'KYC верификация', email:'E-mail', email_add:'Добавить', email_verify:'Подтвердить', email_ok:'Подтверждён', wallets:'Кошельки', devices:'Устройства', language:'Язык', logout:'Выйти из аккаунта' },
-    security:{ title:'Безопасность', subtitle:'E-mail, PIN, приватность', pin_on:'PIN: включён', pin_off:'PIN: выключен', hide_on:'Скрывать баланс: да', hide_off:'Скрывать баланс: нет', toggle_pin:'Переключить PIN', toggle_hide:'Скрывать баланс' },
-    lang:{ title:'Язык', ru:'Русский', en:'English', id:'Bahasa Indonesia' }
+    common: {
+      beta_badge: 'beta ⓘ',
+      soon: 'Скоро',
+    },
+    home: {
+      total_balance: 'Общий баланс',
+      toggle_balance: 'Показать/скрыть баланс',
+      hidden_amount: '• • • ₽',
+      quick_actions: 'Быстрые действия',
+      quick_actions_aria: 'Быстрые действия',
+      action_deposit: 'Пополнить',
+      action_send: 'Отправить',
+      action_exchange: 'Обмен валют',
+      action_pay: 'Оплата',
+      promo_title: 'До 30% комиссии',
+      promo_sub: 'за платежи друзей по вашей ссылке',
+      promo_cta: 'Пригласить',
+    },
+    profile: {
+      title: 'Профиль',
+      ref: 'Реферальная программа',
+      settings: 'Параметры',
+      about: 'О нас',
+      kyc_title: 'KYC верификация',
+      kyc_short: 'KYC',
+      email: 'E-mail',
+      email_add: 'Добавить',
+      email_verify: 'Подтвердить',
+      email_ok: 'Подтверждён',
+      wallets: 'Кошельки',
+      devices: 'Устройства',
+      language: 'Язык',
+      logout: 'Выйти из аккаунта',
+      promo: 'Промо и купоны',
+      official_accounts: 'Официальные аккаунты',
+      faq: 'FAQ',
+      info: 'Инфо',
+      support: 'Поддержка',
+    },
+    security: {
+      title: 'Безопасность',
+      subtitle: 'E-mail, PIN, приватность',
+      pin_on: 'PIN: включён',
+      pin_off: 'PIN: выключен',
+      hide_on: 'Скрывать баланс: да',
+      hide_off: 'Скрывать баланс: нет',
+      toggle_pin: 'Переключить PIN',
+      toggle_hide: 'Скрывать баланс',
+    },
+    lang: {
+      title: 'Язык',
+      ru: 'Русский',
+      en: 'English',
+      id: 'Bahasa Indonesia',
+    },
+    settings: {
+      language_title: 'Язык',
+      language_current: 'Текущий язык приложения',
+      language_hint: 'Выберите язык интерфейса',
+    },
+    kyc: {
+      title: 'KYC верификация',
+      subtitle: 'Выберите документ и загрузите фото',
+      passport: 'Паспорт',
+      idcard: 'ID-карта',
+      driver: 'Водительское удостоверение',
+    },
+    topup: {
+      title: 'Пополнить',
+      amount_in: 'Сумма в',
+      currency: 'валюта',
+      demo_note: 'Это демо-экран. Функции пополнения — визуал без бэкенда.',
+      methods: 'Способы',
+      card: 'Банковская карта',
+      card_note: 'UI-демо, без списания',
+      crypto: 'Крипто-депозит',
+      crypto_note: 'Пополнение через адрес',
+      qr: 'QR-код',
+      qr_note: 'Отсканировать код для оплаты',
+      gift: 'Подарочный код',
+      gift_note: 'Активировать промокод',
+      done: 'Готово',
+    },
   },
   en: {
-    quick: { topup:'Top up', send:'Send', exchange:'Exchange', pay:'Pay', aria:'Quick actions' },
-    home: { total_balance:'Total balance', toggle_balance:'Show/Hide balance', hidden_amount:'• • •', quick_actions:'Quick actions', action_topup:'Top up', action_send:'Send', action_sell:'Exchange', action_pay:'Pay', promo_title:'Up to 30% commission', promo_sub:"from each friend's payment", promo_cta:'Invite', soon:'Soon', asset_badge_new:'NEW' },
-    profile:{ title:'Profile', ref:'Referral program', settings:'Settings', about:'About', kyc:'KYC verification', email:'E-mail', email_add:'Add', email_verify:'Verify', email_ok:'Verified', wallets:'Wallets', devices:'Devices', language:'Language', logout:'Log out' },
-    security:{ title:'Security', subtitle:'E-mail, PIN, privacy', pin_on:'PIN: on', pin_off:'PIN: off', hide_on:'Hide balance: yes', hide_off:'Hide balance: no', toggle_pin:'Toggle PIN', toggle_hide:'Hide balance' },
-    lang:{ title:'Language', ru:'Русский', en:'English', id:'Bahasa Indonesia' }
+    common: {
+      beta_badge: 'beta ⓘ',
+      soon: 'Soon',
+    },
+    home: {
+      total_balance: 'Total balance',
+      toggle_balance: 'Show/Hide balance',
+      hidden_amount: '• • •',
+      quick_actions: 'Quick actions',
+      quick_actions_aria: 'Quick actions',
+      action_deposit: 'Deposit',
+      action_send: 'Send',
+      action_exchange: 'Exchange',
+      action_pay: 'Pay',
+      promo_title: 'Up to 30% commission',
+      promo_sub: "from each friend's payment",
+      promo_cta: 'Invite',
+    },
+    profile: {
+      title: 'Profile',
+      ref: 'Referral program',
+      settings: 'Settings',
+      about: 'About',
+      kyc_title: 'KYC verification',
+      kyc_short: 'KYC',
+      email: 'E-mail',
+      email_add: 'Add',
+      email_verify: 'Verify',
+      email_ok: 'Verified',
+      wallets: 'Wallets',
+      devices: 'Devices',
+      language: 'Language',
+      logout: 'Log out',
+      promo: 'Promo & Coupons',
+      official_accounts: 'Official accounts',
+      faq: 'FAQ',
+      info: 'Info',
+      support: 'Support',
+    },
+    security: {
+      title: 'Security',
+      subtitle: 'E-mail, PIN, privacy',
+      pin_on: 'PIN: on',
+      pin_off: 'PIN: off',
+      hide_on: 'Hide balance: yes',
+      hide_off: 'Hide balance: no',
+      toggle_pin: 'Toggle PIN',
+      toggle_hide: 'Hide balance',
+    },
+    lang: {
+      title: 'Language',
+      ru: 'Russian',
+      en: 'English',
+      id: 'Bahasa Indonesia',
+    },
+    settings: {
+      language_title: 'Language',
+      language_current: 'Current app language',
+      language_hint: 'Choose the app language',
+    },
+    kyc: {
+      title: 'KYC verification',
+      subtitle: 'Choose a document and upload photos',
+      passport: 'Passport',
+      idcard: 'ID card',
+      driver: 'Driver license',
+    },
+    topup: {
+      title: 'Top up',
+      amount_in: 'Amount in',
+      currency: 'currency',
+      demo_note: 'This is a demo screen. Top-up actions are UI only.',
+      methods: 'Methods',
+      card: 'Bank card',
+      card_note: 'UI demo, no charges',
+      crypto: 'Crypto deposit',
+      crypto_note: 'Fund via address',
+      qr: 'QR code',
+      qr_note: 'Scan a code to pay',
+      gift: 'Gift code',
+      gift_note: 'Redeem promo code',
+      done: 'Done',
+    },
   },
   id: {
-    quick: { topup:'Isi ulang', send:'Kirim', exchange:'Tukar', pay:'Bayar', aria:'Aksi cepat' },
-    home: { total_balance:'Saldo total', toggle_balance:'Tampil/sembunyi saldo', hidden_amount:'• • •', quick_actions:'Aksi cepat', action_topup:'Isi ulang', action_send:'Kirim', action_sell:'Tukar', action_pay:'Bayar', promo_title:'Hingga 30% komisi', promo_sub:'dari pembayaran teman Anda', promo_cta:'Undang', soon:'Segera', asset_badge_new:'BARU' },
-    profile:{ title:'Profil', ref:'Program rujukan', settings:'Pengaturan', about:'Tentang', kyc:'Verifikasi KYC', email:'E-mail', email_add:'Tambah', email_verify:'Verifikasi', email_ok:'Terverifikasi', wallets:'Dompet', devices:'Perangkat', language:'Bahasa', logout:'Keluar' },
-    security:{ title:'Keamanan', subtitle:'E-mail, PIN, privasi', pin_on:'PIN: aktif', pin_off:'PIN: nonaktif', hide_on:'Sembunyikan saldo: ya', hide_off:'Sembunyikan saldo: tidak', toggle_pin:'Alihkan PIN', toggle_hide:'Sembunyikan saldo' },
-    lang:{ title:'Bahasa', ru:'Русский', en:'English', id:'Bahasa Indonesia' }
-  }
+    common: {
+      beta_badge: 'beta ⓘ',
+      soon: 'Segera',
+    },
+    home: {
+      total_balance: 'Saldo total',
+      toggle_balance: 'Tampil/sembunyi saldo',
+      hidden_amount: '• • •',
+      quick_actions: 'Aksi cepat',
+      quick_actions_aria: 'Aksi cepat',
+      action_deposit: 'Isi ulang',
+      action_send: 'Kirim',
+      action_exchange: 'Tukar',
+      action_pay: 'Bayar',
+      promo_title: 'Hingga 30% komisi',
+      promo_sub: 'dari pembayaran teman Anda',
+      promo_cta: 'Undang',
+    },
+    profile: {
+      title: 'Profil',
+      ref: 'Program rujukan',
+      settings: 'Pengaturan',
+      about: 'Tentang',
+      kyc_title: 'Verifikasi KYC',
+      kyc_short: 'KYC',
+      email: 'E-mail',
+      email_add: 'Tambah',
+      email_verify: 'Verifikasi',
+      email_ok: 'Terverifikasi',
+      wallets: 'Dompet',
+      devices: 'Perangkat',
+      language: 'Bahasa',
+      logout: 'Keluar dari akun',
+      promo: 'Promo & Kupon',
+      official_accounts: 'Akun resmi',
+      faq: 'FAQ',
+      info: 'Info',
+      support: 'Dukungan',
+    },
+    security: {
+      title: 'Keamanan',
+      subtitle: 'E-mail, PIN, privasi',
+      pin_on: 'PIN: aktif',
+      pin_off: 'PIN: nonaktif',
+      hide_on: 'Sembunyikan saldo: ya',
+      hide_off: 'Sembunyikan saldo: tidak',
+      toggle_pin: 'Alihkan PIN',
+      toggle_hide: 'Sembunyikan saldo',
+    },
+    lang: {
+      title: 'Bahasa',
+      ru: 'Rusia',
+      en: 'Inggris',
+      id: 'Bahasa Indonesia',
+    },
+    settings: {
+      language_title: 'Bahasa',
+      language_current: 'Bahasa aplikasi saat ini',
+      language_hint: 'Pilih bahasa aplikasi',
+    },
+    kyc: {
+      title: 'Verifikasi KYC',
+      subtitle: 'Pilih dokumen dan unggah foto',
+      passport: 'Paspor',
+      idcard: 'KTP',
+      driver: 'SIM',
+    },
+    topup: {
+      title: 'Isi ulang',
+      amount_in: 'Jumlah dalam',
+      currency: 'mata uang',
+      demo_note: 'Ini adalah layar demo. Top-up hanya antarmuka.',
+      methods: 'Metode',
+      card: 'Kartu bank',
+      card_note: 'Demo UI, tanpa penarikan',
+      crypto: 'Deposit kripto',
+      crypto_note: 'Isi melalui alamat',
+      qr: 'Kode QR',
+      qr_note: 'Pindai kode untuk membayar',
+      gift: 'Kode hadiah',
+      gift_note: 'Tukarkan kode promo',
+      done: 'Selesai',
+    },
+  },
 };
 
-export function getLang(): Lang {
-  try {
-    const raw = (typeof window !== 'undefined' && localStorage.getItem('lang')) || 'ru';
-    const v = String(raw).toLowerCase();
-    return (v === 'en' || v === 'id') ? (v as Lang) : 'ru';
-  } catch { return 'ru'; }
-}
-
-export function setLang(l: Lang) {
-  try {
-    localStorage.setItem('lang', l);
-    window.dispatchEvent(new CustomEvent('i18n:changed', { detail: l }));
-  } catch {}
-}
-
-/** t(ns,key): если ключ не найден — возвращаем сам key */
-export function t(ns: string, key: string): string {
-  const l = getLang();
-  return dict[l]?.[ns]?.[key] ?? key;
+export function normalizeLang(value?: string | null): Lang | null {
+  if (!value) return null;
+  const lower = String(value).toLowerCase();
+  return (AVAILABLE_LANGS as readonly string[]).includes(lower)
+    ? (lower as Lang)
+    : null;
 }

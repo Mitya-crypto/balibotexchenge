@@ -1,8 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { tr } from '../../../components/ui/tr';
+import { useI18n } from '../../../lib/i18n';
 
 export default function SecurityPage(){
+  const { t } = useI18n();
   const [email,setEmail] = useState<string|undefined>();
   const [verified,setVerified] = useState(false);
   const [pin,setPin] = useState(false);
@@ -21,28 +22,28 @@ export default function SecurityPage(){
 
   return (
     <div style={{maxWidth:480, margin:'0 auto 96px', padding:'12px 16px'}}>
-      <h1 className="sect-title" style={{marginTop:4}}>{tr('security','title','Безопасность')}</h1>
+      <h1 className="sect-title" style={{marginTop:4}}>{t('security','title')}</h1>
       <div className="list-card">
         <div className="list-row">
           <span className="row-ico">{IconMail()}</span>
-          <span className="row-label">{tr('profile','email','E-mail')}</span>
+          <span className="row-label">{t('profile','email')}</span>
           <span className="row-value" style={{marginLeft:'auto'}}>{
-            email ? (verified ? tr('profile','email_ok','Подтверждён') : tr('profile','email_verify','Подтвердить')) : tr('profile','email_add','Добавить')
+            email ? (verified ? t('profile','email_ok') : t('profile','email_verify')) : t('profile','email_add')
           }</span>
         </div>
       </div>
 
-      <h2 className="sect-title">{tr('security','subtitle','E-mail, PIN, приватность')}</h2>
+      <h2 className="sect-title">{t('security','subtitle')}</h2>
       <div className="list-card">
         <div className="list-row">
           <span className="row-ico">{IconPin()}</span>
-          <span className="row-label">{pin?tr('security','pin_on','PIN: включён'):tr('security','pin_off','PIN: выключен')}</span>
-          <button className="row-pill" data-on={pin?1:0} onClick={toggle('pin_enabled', setPin)}>{tr('security','toggle_pin','Переключить PIN')}</button>
+          <span className="row-label">{pin ? t('security','pin_on') : t('security','pin_off')}</span>
+          <button className="row-pill" data-on={pin?1:0} onClick={toggle('pin_enabled', setPin)}>{t('security','toggle_pin')}</button>
         </div>
         <div className="list-row">
           <span className="row-ico">{IconEye()}</span>
-          <span className="row-label">{hide?tr('security','hide_on','Скрывать баланс: да'):tr('security','hide_off','Скрывать баланс: нет')}</span>
-          <button className="row-pill" data-on={hide?1:0} onClick={toggle('hideBalance', setHide)}>{tr('security','toggle_hide','Скрывать баланс')}</button>
+          <span className="row-label">{hide ? t('security','hide_on') : t('security','hide_off')}</span>
+          <button className="row-pill" data-on={hide?1:0} onClick={toggle('hideBalance', setHide)}>{t('security','toggle_hide')}</button>
         </div>
       </div>
     </div>

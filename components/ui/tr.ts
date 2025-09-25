@@ -1,4 +1,9 @@
-/** RU-only: всегда отдаём переданный fallback (русский). */
-export function tr(_ns: string, _key: string, fallback?: string){
-  return (fallback ?? _key);
+import { t as translate } from '../../lib/i18n';
+
+export function tr(ns: string, key: string, fallback?: string) {
+  const value = translate(ns, key);
+  if (value === key && fallback !== undefined) {
+    return fallback;
+  }
+  return value;
 }
